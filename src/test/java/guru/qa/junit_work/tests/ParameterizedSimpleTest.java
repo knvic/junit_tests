@@ -23,7 +23,7 @@ import static com.codeborne.selenide.CollectionCondition.texts;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
-@Disabled
+//@Disabled
 public class ParameterizedSimpleTest extends BaseTest {
 
     ParameterizedPage parameterizedPage = new ParameterizedPage();
@@ -39,7 +39,7 @@ public class ParameterizedSimpleTest extends BaseTest {
     }
     @MethodSource("parameterizedSimpleTest")
     @Tag("all")
-    @Test
+
     @ParameterizedTest(name="Проверка меню сайта при перелючении локали на {0} отображается меню {1}")
     void parameterizedSimpleTest(Locale locale,List<String> list) {
         parameterizedPage
