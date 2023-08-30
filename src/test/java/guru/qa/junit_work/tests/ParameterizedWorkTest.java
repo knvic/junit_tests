@@ -20,7 +20,7 @@ import static com.codeborne.selenide.Selenide.sleep;
 import static com.codeborne.selenide.logevents.SelenideLogger.step;
 
 
-public class ParameterizedLocaleTest extends BaseTest {
+public class ParameterizedWorkTest extends BaseTest {
     ParameterizedLocalePage parameterizedLocalePage = new ParameterizedLocalePage();
     ParameterizedCityPage parameterizedCityPage = new ParameterizedCityPage();
 
@@ -30,7 +30,6 @@ public class ParameterizedLocaleTest extends BaseTest {
                 Arguments.of("en", List.of("RU", "EN", "ABOUT US", "NEWS", "CONTACTS"))
         );
     }
-
     @MethodSource("parameterizedLocalePage")
     @Tag("all")
     @ParameterizedTest(name = "Проверка меню сайта при перелючении локали на {0} отображается меню {1}")
