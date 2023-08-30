@@ -11,37 +11,33 @@ import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
 
 
-
 public class ParameterizedLocalePage {
 
-      SelenideElement
-              selectLocale =$("#langs"),
-        menu =$("#menu"),
-    setLocalisation= $(".page-header__city > span"),
-   // caseCity=$(".base-modal__body"),
-
-    caseCity=$(".modal-cities__inner-wrap"),
-    targetCity=$(".page-header__city"),
-    tab=$(".base-modal__wrap"),
-    //searchCity=$("#search-city");
-    searchCity=$("input[placeholder='Поиск города']"),
-
-    vibor=$(".modal-cities__item");
+    SelenideElement
+            selectLocale = $("#langs"),
+            menu = $("#menu"),
+            setLocalisation = $(".page-header__city > span"),
+            caseCity = $(".modal-cities__inner-wrap"),
+            targetCity = $(".page-header__city"),
+            tab = $(".base-modal__wrap"),
+            searchCity = $("input[placeholder='Поиск города']"),
+            vibor = $(".modal-cities__item");
 
     public ParameterizedLocalePage openPage() {
         open("https://paraavis.com/");
         return this;
     }
 
-       public ParameterizedLocalePage setLocale(Locale locale) {
-            selectLocale.find(byText(locale.name())).click();
+    public ParameterizedLocalePage setLocale(Locale locale) {
+        selectLocale.find(byText(locale.name())).click();
         return this;
     }
 
     public ParameterizedLocalePage setLocale1(String locale) {
-               selectLocale.find(byText(locale)).click();
+        selectLocale.find(byText(locale)).click();
         return this;
     }
+
     public ParameterizedLocalePage shouldHave(List<String> list) {
 
         //menu.shouldHave(texts(list));
@@ -81,9 +77,10 @@ public class ParameterizedLocalePage {
     }
 
     public ParameterizedLocalePage clickSearchingCity(String city) {
-           $(".modal-cities__wrap-items > .modal-cities__item").click();
+        $(".modal-cities__wrap-items > .modal-cities__item").click();
         return this;
     }
+
     public ParameterizedLocalePage checkResultInMenu(String city) {
         $(".modal-cities__wrap-items > .modal-cities__item").click();
         return this;

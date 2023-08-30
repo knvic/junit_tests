@@ -6,8 +6,8 @@ public class SimpleTest {
 
     @Tags({
             @Tag("all"),
-            @Tag("WEB"),
-            @Tag("API")
+            @Tag("WEB")
+
     })
     @DisplayName("TEST  WEB&API ")
     @Test
@@ -27,7 +27,7 @@ public class SimpleTest {
 
     @Tags({
             @Tag("all"),
-            @Tag("API")
+            @Tag("api")
     })
     @DisplayName("TEST include вапролдл API")
     @Test
@@ -37,7 +37,7 @@ public class SimpleTest {
 
     @Tags({
             @Tag("all"),
-            @Tag("API"),
+            @Tag("api"),
             @Tag("regression"),
             @Tag("smoke")
     })

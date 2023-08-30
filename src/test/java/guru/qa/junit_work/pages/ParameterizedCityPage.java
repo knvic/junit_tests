@@ -5,6 +5,7 @@ import com.codeborne.selenide.SelenideElement;
 import java.util.List;
 
 import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
@@ -12,40 +13,22 @@ import static com.codeborne.selenide.Selenide.open;
 
 public class ParameterizedCityPage {
 
-   // ParameterizedPage parameterizedPage=new ParameterizedPage();
+
     SelenideElement
-        selectRu=$("#langs"),
-           setLocalisation= $(".page-header__city > span"),
-   // caseCity=$(".base-modal__body"),
+            setLocalisation = $(".page-header__city > span"),
+            searchCity = $("input[placeholder='Поиск города']"),
+            caseCity = $(".modal-cities__inner-wrap"),
+            targetCity = $(".page-header__city"),
+            visibleTab= $(".base-modal__wrap"),
+            vibor = $(".modal-cities__item");
 
-    caseCity=$(".modal-cities__inner-wrap"),
-    targetCity=$(".page-header__city"),
-    tab=$(".base-modal__wrap"),
-    //searchCity=$("#search-city");
-    searchCity=$("input[placeholder='Поиск города']"),
-
-    vibor=$(".modal-cities__item");
-
-    public ParameterizedCityPage openPage() {
-        open("https://paraavis.com/");
-        return this;
-    }
 
     public ParameterizedCityPage openPagekusnoitochka() {
         open("https://vkusnoitochka.ru/");
         return this;
     }
-    public ParameterizedCityPage setLocale(Locale locale) {
-        //selectRu.$(byText(locale.name())).click();
-       selectRu.find(byText(locale.name())).click();
-        return this;
-    }
 
-    public ParameterizedCityPage setLocale1(String locale) {
-        //selectRu.$(byText(locale.name())).click();
-        selectRu.find(byText(locale)).click();
-        return this;
-    }
+
     public ParameterizedCityPage shouldHave(List<String> list) {
 
         //menu.shouldHave(texts(list));
@@ -77,6 +60,14 @@ public class ParameterizedCityPage {
         return this;
     }
 
+    public ParameterizedCityPage tabShouldVisible() {
+
+        $(".base-modal__wrap").shouldBe(visible);
+
+        return this;
+    }
+
+
     public ParameterizedCityPage search(String city) {
         searchCity.click();
         searchCity.setValue(city);
@@ -85,11 +76,20 @@ public class ParameterizedCityPage {
     }
 
     public ParameterizedCityPage clickSearchingCity(String city) {
-           $(".modal-cities__wrap-items > .modal-cities__item").click();
+        $(".modal-cities__wrap-items > .modal-cities__item").click();
         return this;
     }
+
     public ParameterizedCityPage checkResultInMenu(String city) {
         $(".modal-cities__wrap-items > .modal-cities__item").click();
+        return this;
+    }
+
+
+    public ParameterizedCityPage tabShouldHaveText(String city) {
+
+        setLocalisation.shouldHave(text(city));
+
         return this;
     }
 

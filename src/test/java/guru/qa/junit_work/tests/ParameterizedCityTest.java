@@ -9,12 +9,13 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 
+import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.sleep;
 import static com.codeborne.selenide.logevents.SelenideLogger.step;
 
 
-
-public class ParameterizedSimpleTest2 extends BaseTest {
+public class ParameterizedCityTest extends BaseTest {
 
     ParameterizedCityPage parameterizedCityPage = new ParameterizedCityPage();
 
@@ -22,37 +23,38 @@ public class ParameterizedSimpleTest2 extends BaseTest {
     @ValueSource(
             strings = {"Пятигорск", "Новосибирск"}
     )
-    @MethodSource("parameterizedSimpleTest2")
     @Tag("all")
     @ParameterizedTest(name = "Check city  =>  {0}")
-    void parameterizedSimpleTest2(String city) {
-step("Открываем страницу https://vkusnoitochka.ru/", ()->{
+    void parameterizedCityTest(String city) {
+
+        step("Открываем страницу https://vkusnoitochka.ru/", () -> {
             parameterizedCityPage
                     .openPagekusnoitochka();
-         });
-
-
+        });
 
 
         sleep(2000);
-        step("Открываем окно выбора города", ()->{
+
+        step("Открываем окно выбора города", () -> {
             parameterizedCityPage
                     .getTabLocalisation();
+
+        });
+        step("Проверяем, что окно выбора города открыто", () -> {
+            parameterizedCityPage
+                    .tabShouldVisible();
+
         });
 
-        step("Открываем окно выбора в поиске набираем город " +city+" и выбираем его", ()->{
+        step("Открываем окно выбора в поиске набираем город " + city + " и выбираем его", () -> {
             parameterizedCityPage
                     .search(city);
         });
 
 
-
-
         sleep(1000);
-              /*  .caseCity(city)
-
-                .shouldHaveCity(city);*/
-
+        parameterizedCityPage
+                .tabShouldHaveText(city);
 
     }
 }
