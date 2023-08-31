@@ -6,11 +6,15 @@ import guru.qa.junit_work.pages.Locale;
 import guru.qa.junit_work.pages.ParameterizedCityPage;
 import guru.qa.junit_work.pages.ParameterizedLocalePage;
 import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Tags;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.CsvFileSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -30,6 +34,7 @@ public class ParameterizedWorkTest extends BaseTest {
                 Arguments.of("en", List.of("RU", "EN", "ABOUT US", "NEWS", "CONTACTS"))
         );
     }
+
     @MethodSource("parameterizedLocalePage")
     @Tag("all")
     @ParameterizedTest(name = "Проверка меню сайта при перелючении локали на {0} отображается меню {1}")
@@ -39,6 +44,24 @@ public class ParameterizedWorkTest extends BaseTest {
                 .setLocale1(locale);
         $$(".skewed a").should(texts(list));
     }
+
+
+    @Tags({
+            @Tag("all"),
+            @Tag("csvfile")
+    })
+    @ParameterizedTest(name = "Проверка меню сайта при перелючении локали на {0} отображается меню {1}")
+    @CsvFileSource(resources = "/csvDataFile.csv", delimiter = '&')
+    void parameterizedCSVLocaleTest(String locale, String menu) {
+        System.out.println("string = " + locale);
+        System.out.println("menu = " + menu);
+        List<String> list = new ArrayList<String>(Arrays.asList(menu.split(",")));
+        parameterizedLocalePage
+                .openPage()
+                .setLocale1(locale);
+        $$(".skewed a").should(texts(list));
+    }
+
 
     static Stream<Arguments> parameterizedSimpleTest() {
         return Stream.of(
@@ -59,6 +82,7 @@ public class ParameterizedWorkTest extends BaseTest {
             $$(".skewed a").should(texts(list));
         });
     }
+
 
     @ValueSource(
             strings = {"Пятигорск", "Новосибирск"}

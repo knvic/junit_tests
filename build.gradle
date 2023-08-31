@@ -51,7 +51,8 @@ test {
     }*/
 
     useJUnitPlatform {
-        includeTags('WEB', 'smoke','all')
+        //includeTags('WEB', 'smoke','all')
+        includeTags('csvfile','all')
         excludeTags('regression')
     }
 
