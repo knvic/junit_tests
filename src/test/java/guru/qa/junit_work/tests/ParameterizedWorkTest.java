@@ -1,10 +1,10 @@
 package guru.qa.junit_work.tests;
 
 
-import guru.qa.junit_work.BaseTest;
 import guru.qa.junit_work.pages.Locale;
 import guru.qa.junit_work.pages.ParameterizedCityPage;
 import guru.qa.junit_work.pages.ParameterizedLocalePage;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Tags;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -28,38 +28,67 @@ public class ParameterizedWorkTest extends BaseTest {
     ParameterizedLocalePage parameterizedLocalePage = new ParameterizedLocalePage();
     ParameterizedCityPage parameterizedCityPage = new ParameterizedCityPage();
 
+   /* 0)    TEST_DATA_1:
+            [
+            ['"ru"', '"RU", "EN", "О НАС", "НОВОСТИ", "КОНТАКТЫ", "МАГАЗИН"'],
+            ['"en"', '"RU", "EN", "ABOUT US", "NEWS", "CONTACTS"']
+            ]
+
+            1) ЗАГОЛОВОК: "На сайте при выборе локали выбранной локали 'TES_DATA[0]' присутствует меню на языке выбранной локали 'TES_DATA[1]'"
+            2) ПРИОРОИТЕТ: BLOCKER
+            3) ПРЕДУСЛОВИЯ: - Открыт браузер chrome, location: https://paraavis.com/
+
+            4) ШАГИ
+            - Нажимаем на выбранную локаль 'TES_DATA[0]'
+
+
+            5) ОЖИДАЕМЫЙ РЕЗУЛЬТАТ:
+            - В в меню присутствует строка 'TES_DATA[1]'*/
+
+
     static Stream<Arguments> parameterizedLocalePage() {
         return Stream.of(
                 Arguments.of("ru", List.of("RU", "EN", "О НАС", "НОВОСТИ", "КОНТАКТЫ", "МАГАЗИН")),
                 Arguments.of("en", List.of("RU", "EN", "ABOUT US", "NEWS", "CONTACTS"))
         );
     }
-
+    @DisplayName("Параметризованный тест с использованием Stream<Arguments> ")
     @MethodSource("parameterizedLocalePage")
     @Tag("all")
     @ParameterizedTest(name = "Проверка меню сайта при перелючении локали на {0} отображается меню {1}")
     void parameterizedLocaleTest(String locale, List<String> list) {
-        parameterizedLocalePage
-                .openPage()
-                .setLocale1(locale);
-        $$(".skewed a").should(texts(list));
+        step("Открываем страницу https://paraavis.com/", () -> {
+            parameterizedLocalePage
+                    .openPage();
+        });
+
+        step("Выбираем локаль", () -> {
+            parameterizedLocalePage
+                    .setLocaleStr(locale);
+        });
+
+
+        step("Проверяем наличие меню", () -> {
+            parameterizedLocalePage
+                    .shouldHaveTargetMenu(list);
+        });
+
+
     }
 
-
+    @DisplayName("Параметризованный тест с использованием CsvFileSource ")
     @Tags({
             @Tag("all"),
             @Tag("csvfile")
     })
     @ParameterizedTest(name = "Проверка меню сайта при перелючении локали на {0} отображается меню {1}")
     @CsvFileSource(resources = "/csvDataFile.csv", delimiter = '&')
-    void parameterizedCSVLocaleTest(String locale, String menu) {
-        System.out.println("string = " + locale);
-        System.out.println("menu = " + menu);
+    void parameterizedLocaleCSVTest(String locale, String menu) {
         List<String> list = new ArrayList<String>(Arrays.asList(menu.split(",")));
         parameterizedLocalePage
                 .openPage()
-                .setLocale1(locale);
-        $$(".skewed a").should(texts(list));
+                .setLocaleStr(locale)
+                .shouldHaveTargetMenu(list);
     }
 
 
@@ -69,7 +98,7 @@ public class ParameterizedWorkTest extends BaseTest {
                 Arguments.of(Locale.en, List.of("RU", "EN", "ABOUT US", "NEWS", "CONTACTS"))
         );
     }
-
+    @DisplayName("Параметризованный тест с использованием Stream<Arguments> и ENUM")
     @MethodSource("parameterizedSimpleTest")
     @Tag("all")
     @ParameterizedTest(name = "Проверка меню сайта при перелючении локали на {0} отображается меню {1}")
@@ -78,10 +107,30 @@ public class ParameterizedWorkTest extends BaseTest {
         step("Открываем страницу https://paraavis.com/", () -> {
             parameterizedLocalePage
                     .openPage()
-                    .setLocale(locale);
-            $$(".skewed a").should(texts(list));
+                    .setLocale(locale)
+                    .shouldHaveTargetMenu(list);
         });
     }
+
+
+     /*     0) TEST_DATA_2:
+            [
+            ['"Пятигорск"'],
+            ['"Новосибирск"']
+            ]
+
+            1) ЗАГОЛОВОК: "На сайте при выборе и смене города  в местоположении отображается выбранный 'TES_DATA[0]' (набранный с строке поиска ) город 'TES_DATA[0]''"
+            2) ПРИОРОИТЕТ: BLOCKER
+            3) ПРЕДУСЛОВИЯ: - Открыт браузер chrome, location: https://vkusnoitochka.ru/
+
+            4) ШАГИ
+            - Нажимаем на местположения
+            -В появившемся окне выбора города в строке поиска набираем город 'TES_DATA[0]'
+            -В поле найденных городов выбираем наш город 'TES_DATA[0]'
+
+
+            5) ОЖИДАЕМЫЙ РЕЗУЛЬТАТ:
+            - В поле местоположения пристствует набранный/выбранный город 'TES_DATA[0]'*/
 
 
     @ValueSource(
@@ -114,8 +163,11 @@ public class ParameterizedWorkTest extends BaseTest {
 
         sleep(1000);
 
-        parameterizedCityPage
-                .tabShouldHaveText(city);
+        step("Проверяем в поле местоположения присутствие выбранного города " + city, () -> {
+            parameterizedCityPage
+                    .tabShouldHaveText(city);
+        });
+
     }
 
 }
