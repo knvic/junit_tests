@@ -89,14 +89,17 @@ public class ParameterizedWorkTest extends BaseTest {
 
     static Stream<Arguments> parameterizedSimpleTest() {
         return Stream.of(
-                Arguments.of(Locale.ru, List.of("RU", "EN", "О НАС", "НОВОСТИ", "КОНТАКТЫ", "МАГАЗИН")),
-                Arguments.of(Locale.en, List.of("RU", "EN", "ABOUT US", "NEWS", "CONTACTS"))
+                Arguments.of(Locale.RU, List.of("RU", "EN", "О НАС", "НОВОСТИ", "КОНТАКТЫ", "МАГАЗИН")),
+                Arguments.of(Locale.EN, List.of("RU", "EN", "ABOUT US", "NEWS", "CONTACTS"))
         );
     }
 
     @DisplayName("Параметризованный тест с использованием Stream<Arguments> и ENUM")
     @MethodSource("parameterizedSimpleTest")
-    @Tag("all")
+    @Tags({
+            @Tag("all"),
+            @Tag("enum")
+    })
     @ParameterizedTest(name = "Проверка меню сайта при перелючении локали на {0} отображается меню {1}")
     void parameterizedSimpleTest(Locale locale, List<String> list) {
 

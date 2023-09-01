@@ -14,7 +14,7 @@ public class BaseTest {
          Configuration.browserSize = "1920x1800";
         Configuration.pageLoadStrategy = "eager";
         Configuration.browser = "chrome";
-       // Configuration.holdBrowserOpen=true;
+
     }
 
 }

@@ -21,7 +21,7 @@ public class ParaavisMainPage {
     }
 
     public ParaavisMainPage setLocale(Locale locale) {
-        selectLocale.find(byText(locale.name())).click();
+        selectLocale.find(byText(locale.getLanguage())).click();
         return this;
     }
 
