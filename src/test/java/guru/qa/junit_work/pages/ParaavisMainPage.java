@@ -10,28 +10,28 @@ import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
 
 
-public class ParameterizedLocalePage {
+public class ParaavisMainPage {
 
     SelenideElement
             selectLocale = $("#langs");
 
-    public ParameterizedLocalePage openPage() {
+    public ParaavisMainPage openPage() {
         open("https://paraavis.com/");
         return this;
     }
 
-    public ParameterizedLocalePage setLocale(Locale locale) {
+    public ParaavisMainPage setLocale(Locale locale) {
         selectLocale.find(byText(locale.name())).click();
         return this;
     }
 
-    public ParameterizedLocalePage setLocaleStr(String locale) {
+    public ParaavisMainPage setLocaleStr(String locale) {
         selectLocale.find(byText(locale)).click();
         return this;
     }
 
 
-    public ParameterizedLocalePage shouldHaveTargetMenu(List<String> list) {
+    public ParaavisMainPage shouldHaveTargetMenu(List<String> list) {
 
         $$(".skewed a").should(texts(list));
 

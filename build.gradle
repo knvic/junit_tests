@@ -16,9 +16,9 @@ ext {
 sourceCompatibility = '17'
 targetCompatibility = '17'
 
-/*tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
-}*/
+}
 
 
 
@@ -52,7 +52,8 @@ test {
 
     useJUnitPlatform {
         //includeTags('WEB', 'smoke','all')
-        includeTags('csvfile','all')
+        //includeTags('csvfile','all','duration')
+        includeTags('all')
         excludeTags('regression')
     }
 

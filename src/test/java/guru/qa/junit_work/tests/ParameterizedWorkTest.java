@@ -2,8 +2,8 @@ package guru.qa.junit_work.tests;
 
 
 import guru.qa.junit_work.pages.Locale;
-import guru.qa.junit_work.pages.ParameterizedCityPage;
-import guru.qa.junit_work.pages.ParameterizedLocalePage;
+import guru.qa.junit_work.pages.VkusnoITochkaMainPage;
+import guru.qa.junit_work.pages.ParaavisMainPage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Tags;
@@ -18,15 +18,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static com.codeborne.selenide.CollectionCondition.texts;
-import static com.codeborne.selenide.Selenide.$$;
-import static com.codeborne.selenide.Selenide.sleep;
 import static com.codeborne.selenide.logevents.SelenideLogger.step;
 
 
 public class ParameterizedWorkTest extends BaseTest {
-    ParameterizedLocalePage parameterizedLocalePage = new ParameterizedLocalePage();
-    ParameterizedCityPage parameterizedCityPage = new ParameterizedCityPage();
+    ParaavisMainPage paraavisMainPage = new ParaavisMainPage();
+    VkusnoITochkaMainPage vkusnoITochkaMainPage = new VkusnoITochkaMainPage();
 
    /* 0)    TEST_DATA_1:
             [
@@ -52,27 +49,26 @@ public class ParameterizedWorkTest extends BaseTest {
                 Arguments.of("en", List.of("RU", "EN", "ABOUT US", "NEWS", "CONTACTS"))
         );
     }
+
     @DisplayName("Параметризованный тест с использованием Stream<Arguments> ")
     @MethodSource("parameterizedLocalePage")
     @Tag("all")
     @ParameterizedTest(name = "Проверка меню сайта при перелючении локали на {0} отображается меню {1}")
     void parameterizedLocaleTest(String locale, List<String> list) {
         step("Открываем страницу https://paraavis.com/", () -> {
-            parameterizedLocalePage
+            paraavisMainPage
                     .openPage();
         });
 
         step("Выбираем локаль", () -> {
-            parameterizedLocalePage
+            paraavisMainPage
                     .setLocaleStr(locale);
         });
 
-
         step("Проверяем наличие меню", () -> {
-            parameterizedLocalePage
+            paraavisMainPage
                     .shouldHaveTargetMenu(list);
         });
-
 
     }
 
@@ -85,12 +81,11 @@ public class ParameterizedWorkTest extends BaseTest {
     @CsvFileSource(resources = "/csvDataFile.csv", delimiter = '&')
     void parameterizedLocaleCSVTest(String locale, String menu) {
         List<String> list = new ArrayList<String>(Arrays.asList(menu.split(",")));
-        parameterizedLocalePage
+        paraavisMainPage
                 .openPage()
                 .setLocaleStr(locale)
                 .shouldHaveTargetMenu(list);
     }
-
 
     static Stream<Arguments> parameterizedSimpleTest() {
         return Stream.of(
@@ -98,6 +93,7 @@ public class ParameterizedWorkTest extends BaseTest {
                 Arguments.of(Locale.en, List.of("RU", "EN", "ABOUT US", "NEWS", "CONTACTS"))
         );
     }
+
     @DisplayName("Параметризованный тест с использованием Stream<Arguments> и ENUM")
     @MethodSource("parameterizedSimpleTest")
     @Tag("all")
@@ -105,7 +101,7 @@ public class ParameterizedWorkTest extends BaseTest {
     void parameterizedSimpleTest(Locale locale, List<String> list) {
 
         step("Открываем страницу https://paraavis.com/", () -> {
-            parameterizedLocalePage
+            paraavisMainPage
                     .openPage()
                     .setLocale(locale)
                     .shouldHaveTargetMenu(list);
@@ -136,35 +132,48 @@ public class ParameterizedWorkTest extends BaseTest {
     @ValueSource(
             strings = {"Пятигорск", "Новосибирск"}
     )
-    @Tag("all")
+    @Tags({
+            @Tag("all"),
+            @Tag("duration")
+    })
     @ParameterizedTest(name = "Check city  =>  {0}")
     void parameterizedCityTest(String city) {
 
         step("Открываем страницу https://vkusnoitochka.ru/", () -> {
-            parameterizedCityPage
+            vkusnoITochkaMainPage
                     .openPagekusnoitochka();
         });
-        sleep(2000);
+
+        step("Проверяем(ждем) доступность элемента с городом", () -> {
+            vkusnoITochkaMainPage
+                    .checkActiveElement();
+        });
 
         step("Открываем окно выбора города", () -> {
-            parameterizedCityPage
+            vkusnoITochkaMainPage
                     .getTabLocalisation();
         });
 
-        step("Проверяем, что окно выбора города открыто", () -> {
-            parameterizedCityPage
-                    .tabShouldVisible();
+        step("Длем появления(доступности) окна выбора города", () -> {
+            vkusnoITochkaMainPage
+                    .waitTabCaseCity();
+        });
+
+
+
+        step("Проверяем, что окно выбора города открыто и доступно", () -> {
+            vkusnoITochkaMainPage
+                    .tabShouldVisible()
+                    .waitTabCaseCity();
         });
 
         step("Открываем окно выбора в поиске набираем город " + city + " и выбираем его", () -> {
-            parameterizedCityPage
+            vkusnoITochkaMainPage
                     .search(city);
         });
 
-        sleep(1000);
-
         step("Проверяем в поле местоположения присутствие выбранного города " + city, () -> {
-            parameterizedCityPage
+            vkusnoITochkaMainPage
                     .tabShouldHaveText(city);
         });
 
